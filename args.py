@@ -3,12 +3,12 @@ def configure_parser(parser):
                         '-P',
                         type=str,
                         help='Path to be deployed',
-                        required=False)
+                        required=True)
 
     parser.add_argument('--bucket-name',
                         '-b',
                         type=str,
                         help='Bucket to deploy to',
-                        required=False)
+                        required=True)
 
     return parser.parse_args()
