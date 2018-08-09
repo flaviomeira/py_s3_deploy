@@ -32,11 +32,6 @@ Use the existent tests as a model to write yours.
 ### Why to unit test:
 
 The unit tests validate the interface's functionalities and help us with maintenance of the system, it's important to write tests for EVERYTHING.
-## Built With
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
