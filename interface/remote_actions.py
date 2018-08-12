@@ -23,7 +23,6 @@ class S3Interface:
             return []
         return [x for x in remote_files if x not in local_files]
 
-
     def get_remote_files(self, bucket_name: str) -> list:
         """
         Gets the bucket's file names.
@@ -37,8 +36,7 @@ class S3Interface:
         s3_objects = self.s3.list_objects(Bucket=bucket_name)
         return s3_objects['Contents']
 
-
-    def delete_aws_files(self, files_to_delete: list, bucket_name: str) -> list:
+    def delete_aws_files(self, files_to_delete: dict, bucket_name: str) -> list:
         """
         Deletes files from the bucket.
         Args:

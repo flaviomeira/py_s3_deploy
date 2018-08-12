@@ -9,9 +9,10 @@ from interface.remote_actions import S3Interface
 s3 = boto3_client('s3')
 parser = ArgumentParser(description='Python S3 deploy.')
 args = configure_parser(parser)
-# from ipdb import set_trace; set_trace()
+
 
 def main():
+
     s3_interface = S3Interface(s3)
     _local_files = os.listdir(args.local_path)
     _remote_files = s3_interface.get_remote_files(args.bucket_name)
@@ -26,6 +27,4 @@ def main():
 
 
 if __name__ == "__main__":
-    if not list(args):
-        parser.print_help()
     main()

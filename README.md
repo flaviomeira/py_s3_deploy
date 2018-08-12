@@ -15,7 +15,7 @@ Then go to the project folder and install the requirements:
 ```
 pip install -r requirements.txt
 ```
-You're good to go
+You're ready to go
 
 
 ## Running the tests
