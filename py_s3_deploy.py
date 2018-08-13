@@ -18,7 +18,7 @@ def main():
                                              remote_files=[x['Key'] for x in _remote_files])
 
     files_to_delete = {'Objects': [{'Key': x} for x in files]}
-    if args.etag:
+    if args.delete_removed:
         deleted = s3_interface.delete_aws_files(files_to_delete, args.bucket_name) if files else None
         print('Deleted files:')
         list(map(print, deleted))
