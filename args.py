@@ -11,8 +11,8 @@ def configure_parser(parser):
                         help='Bucket to deploy to',
                         required=True)
 
-    parser.add_argument('--etag',
-                        '-e',
+    parser.add_argument('--delete-removed',
+                        '-d',
                         help='Delete removed files.',
                         action='store_true',
                         required=False)
