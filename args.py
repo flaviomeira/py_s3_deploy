@@ -11,4 +11,10 @@ def configure_parser(parser):
                         help='Bucket to deploy to',
                         required=True)
 
+    parser.add_argument('--delete-removed',
+                        '-d',
+                        help='Delete local removed files from bucket',
+                        action='store_true',
+                        required=False)
+
     return parser.parse_args()

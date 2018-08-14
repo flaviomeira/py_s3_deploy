@@ -1,5 +1,7 @@
 from typing import Iterable
 
+from interface.helper import get_md5_recursively
+
 
 class S3Interface:
     def __init__(self, s3):
@@ -53,3 +55,13 @@ class S3Interface:
         deleted_files = self.s3.delete_objects(Bucket=bucket_name, 
                                                Delete=files_to_delete)
         return deleted_files['Deleted']
+
+    def _upload_file(self, file_: str):
+        """
+        TODO: implement function
+        """
+        raise NotImplementedError
+    
+    def upload_files(self, files: list):
+        for file_ in files:
+            self._upload_file(file_)
