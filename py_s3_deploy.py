@@ -10,6 +10,7 @@ s3 = boto3_client('s3')
 parser = ArgumentParser(description='Python S3 deploy.')
 args = configure_parser(parser)
 
+
 def main():
     s3_interface = S3Interface(s3)
     _local_files = os.listdir(args.local_path)
@@ -19,9 +20,10 @@ def main():
 
     files_to_delete = {'Objects': [{'Key': x} for x in files]}
     if args.delete_removed:
-        deleted = s3_interface.delete_aws_files(files_to_delete, args.bucket_name) if files else None
+        deleted = s3_interface.delete_aws_files(files_to_delete, args.bucket_name) if files \
+            else None
         print('Deleted files:')
-        list(map(print, deleted))
+        list(map(print, deleted)) if deleted else print('There is no files to delete')
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ def configure_parser(parser):
 
     parser.add_argument('--delete-removed',
                         '-d',
-                        help='Delete removed files.',
+                        help='Delete local removed files from bucket',
                         action='store_true',
                         required=False)
 

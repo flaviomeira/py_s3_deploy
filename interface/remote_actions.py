@@ -56,12 +56,12 @@ class S3Interface:
                                                Delete=files_to_delete)
         return deleted_files['Deleted']
 
-    def _upload_file(file_: str):
+    def _upload_file(self, file_: str):
         """
         TODO: implement function
         """
         raise NotImplementedError
     
-    def upload_files(files: list):
+    def upload_files(self, files: list):
         for file_ in files:
             self._upload_file(file_)

@@ -11,7 +11,7 @@ class TestDeleteRemoved(TestCase):
         removed_files = S3Interface.get_files_to_delete(local_file, remote_files)
         self.assertEqual(['file2'], removed_files)
 
-    def test_should_not_delete_file_with_extension(self):
+    def test_should_delete_file_with_extension(self):
         local_file = ['file1.exe', 'files2.exe']
         remote_files = ['file1.exe', 'files2.exe', 'program 2231.exe']
         removed_files = S3Interface.get_files_to_delete(local_file, remote_files)
