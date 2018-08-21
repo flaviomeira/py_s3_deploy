@@ -14,8 +14,11 @@ class TestRemoteActions(TestCase):
         self.s3 = boto3_client('s3')
         self.bucket_name = 'test2207'
         self.local_path = 'tests'
-        os.mkdir('tmp')
-
+        if 'tmp' not in os.listdir():
+            os.mkdir('tmp')
+        with open('tmp/test1', 'w') as f:
+            f.write('foo')
+    
     def tearDown(self):
         shutil.rmtree('tmp')
 
@@ -30,3 +33,12 @@ class TestRemoteActions(TestCase):
             interface = S3Interface(self.s3)
             deleted_files = interface.delete_aws_files([{'Key': 'test1'}], self.bucket_name)
             self.assertEqual(['test1'], deleted_files)
+    
+    def test_get_only_different_files(self):
+        with patch.object(self.s3, 
+                          'list_objects',
+                          return_value={'Contents':
+                                           [{'Key': 'tmp/test1', 'ETag': '"acbd18db4cc2f85cedef654fccc4a4d8"'}]}):
+            interface = S3Interface(self.s3)
+            result = interface.get_files_to_upload(self.bucket_name, 'tmp')
+            self.assertEqual([], result)

@@ -1,6 +1,25 @@
 from functools import reduce
 from hashlib import md5
+from typing import Iterable
 import os
+
+
+def get_files_to_delete(local_files: Iterable, remote_files: Iterable) -> list:
+        """
+        Compare the local and remote files to check if files were removed.
+        Args:
+            list local_files:
+                filenames from the user's filesystem.
+
+            list remote_files:
+                filenames from the remote server
+
+        Returns:
+            list with the files that should be deleted from the remote server
+        """
+        if not '__iter__' in dir(local_files) or not '__iter__' in dir(remote_files):
+            return []
+        return [x for x in remote_files if x not in local_files]
 
 
 def file_md5(file_path: str) -> tuple:
@@ -14,7 +33,8 @@ def file_md5(file_path: str) -> tuple:
         tuple containing the file path and the calculated MD5
     """
     filehash = md5()
-    filehash.update(open(file_path, 'rb').read())
+    with open(file_path, 'rb') as f:
+        filehash.update(f.read())
     return file_path, filehash.hexdigest()
 
 
@@ -38,7 +58,7 @@ def directory_files_md5(path: str) -> list:
     return files
 
 
-def get_md5_recursively(path: str) -> dict:
+def get_md5_recursively(path: str) -> list:
     """
     Walks through a given directory to get the hashes of all files within it,
     including in subfolders.
@@ -47,9 +67,9 @@ def get_md5_recursively(path: str) -> dict:
         desired path.
     
     Returns:
-        dictionary with all the tree of files and their md5.
+        list of all the tree of files and their md5.
     """
     def _closure():
         for x in os.walk(path):
-            yield {k: v for k, v in directory_files_md5(x[0])}
-    return reduce(lambda x, src: x.update(src) or x, _closure(), {})
+            yield directory_files_md5(x[0])
+    return reduce(lambda x, y: x + y, _closure())
