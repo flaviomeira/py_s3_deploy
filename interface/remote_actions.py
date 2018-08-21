@@ -8,24 +8,6 @@ class S3Interface:
     def __init__(self, s3):
         self.s3 = s3
 
-    @staticmethod
-    def get_files_to_delete(local_files: Iterable, remote_files: Iterable) -> list:
-        """
-        Compare the local and remote files to check if files were removed.
-        Args:
-            list local_files:
-                filenames from the user's filesystem.
-
-            list remote_files:
-                filenames from the remote server
-
-        Returns:
-            list with the files that should be deleted from the remote server
-        """
-        if not '__iter__' in dir(local_files) or not '__iter__' in dir(remote_files):
-            return []
-        return [x for x in remote_files if x not in local_files]
-
     def get_remote_files(self, bucket_name: str) -> list:
         """
         Gets the bucket's file names.
@@ -39,7 +21,7 @@ class S3Interface:
         s3_objects = self.s3.list_objects(Bucket=bucket_name)
         return s3_objects['Contents']
 
-    def delete_aws_files(self, files_to_delete: dict, bucket_name: str, verbose: bool=False) -> list:
+    def delete_aws_files(self, files_to_delete: dict, bucket_name: str) -> list:
         """
         Deletes files from the bucket.
         Args:
@@ -50,16 +32,11 @@ class S3Interface:
                      {'Key': 'filex'}]
             str bucket_name:
                 name of the bucket.
-            bool verbose:
-                if true it prints the deleted files
         Returns:
             list of the deleted files.
         """
         deleted_files = self.s3.delete_objects(Bucket=bucket_name, 
                                                Delete=files_to_delete)
-        if verbose:
-            list(map(print, deleted_files['Deleted'])) if deleted_files['Deleted'] \
-                else print('There is no files to delete')
         return deleted_files['Deleted']
 
     def _upload_file(self, bucket_name: str, file_: str):

@@ -17,11 +17,4 @@ def configure_parser(parser):
                         action='store_true',
                         required=False)
 
-    parser.add_argument('--verbose',
-                        '-v',
-                        help='Prints out on the console what is happening',
-                        action='store_true',
-                        required=False,
-                        default=False)
-
     return parser.parse_args()
