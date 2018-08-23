@@ -64,10 +64,12 @@ def get_md5_recursively(path: str) -> list:
     including in subfolders.
     Args:
         str path:
-        desired path.
+            desired path.
     
     Returns:
-        list of all the tree of files and their md5.
+        list of all the tree of files and their md5 in the following format:
+            [('file1', 'hash1'),
+             ('module/file2', 'hash2')]
     """
     def _closure():
         for x in os.walk(path):
