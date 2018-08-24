@@ -37,7 +37,7 @@ class S3Interface:
             list with the file names.
         """
         s3_objects = self.s3.list_objects(Bucket=bucket_name)
-        return s3_objects['Contents']
+        return s3_objects.get('Contents', [])
 
     def delete_aws_files(self, files_to_delete: dict, bucket_name: str) -> list:
         """
