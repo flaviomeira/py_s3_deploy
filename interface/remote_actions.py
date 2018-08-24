@@ -1,12 +1,30 @@
 from typing import Iterable
 import os
 
-from interface.helper import get_md5_recursively, file_md5
+from interface.helper import (get_md5_recursively, file_md5, directory_files_recursively,
+                              get_files_to_delete)
 
 
 class S3Interface:
     def __init__(self, s3):
         self.s3 = s3
+
+    def delete_removed_files(self, local_path: str, bucket_name: str):
+        """
+        Removes from the target bucket only files that are no longer in the given path.
+        Args:
+            str local_path:
+                path to look for the files.
+            str bucket_name:
+                name of the bucket
+
+        Returns:
+            list of the deleted files.
+        """
+        remote_files = self.get_remote_file_names(bucket_name)
+        local_files = directory_files_recursively(local_path)
+        files_to_delete = get_files_to_delete(local_files, remote_files)
+        return self.delete_aws_files(files_to_delete, bucket_name)
 
     def get_remote_files(self, bucket_name: str) -> list:
         """
@@ -79,8 +97,8 @@ class S3Interface:
         Returns:
             list of files that have been uploaded.
         """
-        files = self.get_files_to_upload(path)
-        self.upload_files(bucket_name, list(map(lambda x: x[0], local_files)))
+        files = self.get_files_to_upload(bucket_name, path)
+        self.upload_files(bucket_name, list(map(lambda x: x[0], files)))
         return files
 
     def get_remote_files_etag(self, bucket_name: str):
@@ -89,12 +107,25 @@ class S3Interface:
         Args:
             str bucket_name:
                 name of the bucket.
+
         Returns:
             Generator with the file names and their ETags.
         """
         files = self.get_remote_files(bucket_name)
         for item in files:
             yield (item['Key'], item['ETag'][1:-1])
+
+    def get_remote_file_names(self, bucket_name: str) -> list:
+        """
+        Gets only the names of the remote files.
+        Args:
+            str bucket_name:
+                name of the bucket.
+        
+        Returns:
+            list of the remote file names 
+        """
+        return list(map(lambda x: x.get('Key'), self.get_remote_files(bucket_name)))
 
     def get_files_to_upload(self, bucket_name, path: str):
         """

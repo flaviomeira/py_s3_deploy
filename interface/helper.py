@@ -18,8 +18,8 @@ def get_files_to_delete(local_files: Iterable, remote_files: Iterable) -> list:
             list with the files that should be deleted from the remote server
         """
         if not '__iter__' in dir(local_files) or not '__iter__' in dir(remote_files):
-            return []
-        return [x for x in remote_files if x not in local_files]
+            return {'Objects': []}
+        return {'Objects': [{'Key': x} for x in remote_files if x not in local_files]}
 
 
 def file_md5(file_path: str) -> tuple:
@@ -71,7 +71,44 @@ def get_md5_recursively(path: str) -> list:
             [('file1', 'hash1'),
              ('module/file2', 'hash2')]
     """
-    def _closure():
-        for x in os.walk(path):
-            yield directory_files_md5(x[0])
-    return reduce(lambda x, y: x + y, _closure())
+    hashes = map(lambda x: directory_files_md5(x[0]), os.walk(path))
+    return reduce(lambda crr, src: crr + src, hashes)
+
+
+def directory_files(path: str) -> list:
+    """
+    Gets all the directory files.
+    Args:
+        str path:
+            desired path.
+    
+    Returns:
+        list of file names
+    """
+    files = []
+    for file_ in os.listdir(path):
+        file_dir = os.path.join(path, file_)
+        if not os.path.isdir(file_dir):
+            files.append(file_dir)
+    return files
+
+
+def directory_files_recursively(path: str) -> list:
+    """
+    Gets a list with all the files within the given path, recursively.
+    Args:
+        str path:
+            desired path.
+    Returns:
+        list of file paths.
+    """
+    roots = map(lambda x: directory_files(x[0]), os.walk(path))
+    files = reduce(lambda crr, src: crr + src, roots)
+    if path == '.':
+        files = list(map(lambda x: x[2:], files))
+    return files
+
+
+def print_list(list_: list):
+    for item in list_:
+        print(item)
