@@ -1,8 +1,7 @@
-from argparse import ArgumentParser
 import os
+from argparse import ArgumentParser
 
 from boto3 import client as boto3_client
-
 from args import configure_parser
 from interface.remote_actions import S3Interface
 from interface.helper import get_files_to_delete, print_list

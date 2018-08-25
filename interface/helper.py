@@ -28,7 +28,7 @@ def file_md5(file_path: str) -> tuple:
     Args:
         str file_path:
             path to the file
-    
+
     Returns:
         tuple containing the file path and the calculated MD5
     """
@@ -44,7 +44,7 @@ def directory_files_md5(path: str) -> list:
     Args:
         str path:
             desired path.
-    
+
     Returns:
         list of tuples with the file names and hashes in the following format:
             [('file1', 'hash1'),
@@ -64,8 +64,8 @@ def get_md5_recursively(path: str) -> list:
     including in subfolders.
     Args:
         str path:
-            desired path.
-    
+        desired path.
+
     Returns:
         list of all the tree of files and their md5 in the following format:
             [('file1', 'hash1'),
@@ -81,7 +81,7 @@ def directory_files(path: str) -> list:
     Args:
         str path:
             desired path.
-    
+
     Returns:
         list of file names
     """

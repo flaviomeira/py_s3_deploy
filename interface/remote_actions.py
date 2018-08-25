@@ -53,7 +53,7 @@ class S3Interface:
         Returns:
             list of the deleted files.
         """
-        deleted_files = self.s3.delete_objects(Bucket=bucket_name, 
+        deleted_files = self.s3.delete_objects(Bucket=bucket_name,
                                                Delete=files_to_delete)
         return deleted_files['Deleted']
 
@@ -70,7 +70,7 @@ class S3Interface:
         """
         with open(file_, 'rb') as data:
             self.s3.upload_fileobj(data, bucket_name, file_)
-    
+
     def upload_files(self, bucket_name: str, files: list):
         """
         Uploads a list of files to the bucket.
@@ -84,7 +84,7 @@ class S3Interface:
         """
         for file_ in files:
             self._upload_file(bucket_name, file_)
-    
+
     def upload_only_different_files(self, bucket_name: str, path: str):
         """
         Uploads only files that have their names and MD5 hashes (ETag)
@@ -121,9 +121,9 @@ class S3Interface:
         Args:
             str bucket_name:
                 name of the bucket.
-        
+
         Returns:
-            list of the remote file names 
+            list of the remote file names
         """
         return list(map(lambda x: x.get('Key'), self.get_remote_files(bucket_name)))
 
