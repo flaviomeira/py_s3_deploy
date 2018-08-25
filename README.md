@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/flaviomeira/py_s3_deploy.svg?branch=tox_travis)](https://travis-ci.org/flaviomeira/py_s3_deploy)
 # Python S3 Deploy
 
 AWS deployment made easy.
@@ -13,7 +14,7 @@ git clone git@github.com:flaviomeira/py_s3_deploy.git
 Then go to the project folder and install the requirements:
 
 ```
-pip install -r requirements.txt
+pip install tox
 ```
 You're ready to go
 
@@ -21,7 +22,7 @@ You're ready to go
 ## Running the tests
 
 ```
-python -m unittest
+tox
 ```
 
 ### Unit testing:
