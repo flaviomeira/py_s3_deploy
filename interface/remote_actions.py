@@ -1,7 +1,5 @@
 from typing import Iterable
 
-from interface.helper import get_md5_recursively
-
 
 class S3Interface:
     def __init__(self, s3):
@@ -21,7 +19,7 @@ class S3Interface:
         Returns:
             list with the files that should be deleted from the remote server
         """
-        if not '__iter__' in dir(local_files) or not '__iter__' in dir(remote_files):
+        if '__iter__' not in dir(local_files) or '__iter__' not in dir(remote_files):
             return []
         return [x for x in remote_files if x not in local_files]
 
@@ -52,7 +50,7 @@ class S3Interface:
         Returns:
             list of the deleted files.
         """
-        deleted_files = self.s3.delete_objects(Bucket=bucket_name, 
+        deleted_files = self.s3.delete_objects(Bucket=bucket_name,
                                                Delete=files_to_delete)
         return deleted_files['Deleted']
 
@@ -61,7 +59,7 @@ class S3Interface:
         TODO: implement function
         """
         raise NotImplementedError
-    
+
     def upload_files(self, files: list):
         for file_ in files:
             self._upload_file(file_)
