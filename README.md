@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/flaviomeira/py_s3_deploy.svg?branch=tox_travis)](https://travis-ci.org/flaviomeira/py_s3_deploy)
+[![Build Status](https://travis-ci.org/flaviomeira/py_s3_deploy.svg?branch=master)](https://travis-ci.org/flaviomeira/py_s3_deploy)
 # Python S3 Deploy
 
 AWS deployment made easy.
