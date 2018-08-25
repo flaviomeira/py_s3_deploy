@@ -1,4 +1,3 @@
-from typing import Iterable
 import os
 
 from interface.helper import (get_md5_recursively, file_md5, directory_files_recursively,

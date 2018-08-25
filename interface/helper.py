@@ -17,7 +17,7 @@ def get_files_to_delete(local_files: Iterable, remote_files: Iterable) -> list:
         Returns:
             list with the files that should be deleted from the remote server
         """
-        if not '__iter__' in dir(local_files) or not '__iter__' in dir(remote_files):
+        if '__iter__' not in dir(local_files) or '__iter__' not in dir(remote_files):
             return {'Objects': []}
         return {'Objects': [{'Key': x} for x in remote_files if x not in local_files]}
 

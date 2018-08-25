@@ -16,7 +16,7 @@ def configure_parser(parser):
                         help='Delete local removed files from bucket',
                         action='store_true',
                         required=False)
-    
+
     parser.add_argument('--etag',
                         '-e',
                         help='Uploads only modified files',
