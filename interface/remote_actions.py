@@ -23,7 +23,7 @@ class S3Interface:
         remote_files = self.get_remote_file_names(bucket_name)
         local_files = directory_files_recursively(local_path)
         files_to_delete = get_files_to_delete(local_files, remote_files)
-        if files_to_delete.get('Objects')
+        if files_to_delete.get('Objects'):
             return self.delete_aws_files(files_to_delete, bucket_name)
         else:
             return []
