@@ -3,3 +3,7 @@ __pycache__
 .vscode
 Pipfile.lock
 .idea
+.pytest*
+.tox*
+*egg-info
+unittestsreport.xml

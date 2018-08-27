@@ -1,13 +1,15 @@
 from argparse import ArgumentParser
 
-from boto3 import client as boto3_client
+from boto3 import Session
 from args import configure_parser
 from interface.remote_actions import S3Interface
-from interface.helper import print_list
+from interface.helper import print_list, directory_files_recursively
 
-s3 = boto3_client('s3')
+
 parser = ArgumentParser(description='Python S3 deploy.')
 args = configure_parser(parser)
+session = Session(profile_name=args.profile)
+s3 = session.client('s3')
 
 
 def main():
@@ -17,7 +19,8 @@ def main():
 
     if args.etag:
         print_list(s3_interface.upload_only_different_files(args.bucket_name, args.local_path))
-
+    else:
+        s3_interface.upload_files(directory_files_recursively(args.local_path))
 
 if __name__ == "__main__":
     main()

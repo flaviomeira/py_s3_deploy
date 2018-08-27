@@ -11,6 +11,13 @@ def configure_parser(parser):
                         help='Bucket to deploy to',
                         required=True)
 
+    parser.add_argument('--profile',
+                        '-p',
+                        type=str,
+                        help='profile name of the credentials file',
+                        required=False,
+                        default='default')
+
     parser.add_argument('--delete-removed',
                         '-d',
                         help='Delete local removed files from bucket',
