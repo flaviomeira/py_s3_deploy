@@ -106,7 +106,7 @@ def directory_files_recursively(path: str, full_path=True) -> list:
             desired path.
         bool full_path:
             decides if returns only the path from the given directory or the full path.
-        
+
     Returns:
         list of file paths.
     """
