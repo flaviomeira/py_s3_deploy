@@ -1,7 +1,7 @@
 import os
 
 from interface.helper import (get_md5_recursively, file_md5, directory_files_recursively,
-                              get_files_to_delete)
+                              get_files_to_delete, remove_text)
 
 
 class S3Interface:
@@ -18,10 +18,10 @@ class S3Interface:
                 name of the bucket
 
         Returns:
-            list of the deleted files.
+            list of the deleted files.t
         """
         remote_files = self.get_remote_file_names(bucket_name)
-        local_files = directory_files_recursively(local_path)
+        local_files = directory_files_recursively(local_path, full_path=False)
         files_to_delete = get_files_to_delete(local_files, remote_files)
         if files_to_delete.get('Objects'):
             return self.delete_aws_files(files_to_delete, bucket_name)
@@ -57,9 +57,10 @@ class S3Interface:
         """
         deleted_files = self.s3.delete_objects(Bucket=bucket_name,
                                                Delete=files_to_delete)
+        print(deleted_files['Deleted'])
         return deleted_files['Deleted']
 
-    def _upload_file(self, bucket_name: str, file_: str):
+    def _upload_file(self, bucket_name: str, file_: str, path: str):
         """
         Uploads a single file to the bucket.
         Args:
@@ -67,13 +68,16 @@ class S3Interface:
                 name of the bucket.
             str file_:
                 file name.
+            str path:
+                path to the file.
         Returns:
             None
         """
+        print(file_)
         with open(file_, 'rb') as data:
-            self.s3.upload_fileobj(data, bucket_name, file_)
+            self.s3.upload_fileobj(data, bucket_name, remove_text(file_, path+'/'))
 
-    def upload_files(self, bucket_name: str, files: list):
+    def upload_files(self, bucket_name: str, files: list, path: str):
         """
         Uploads a list of files to the bucket.
         Args:
@@ -81,11 +85,18 @@ class S3Interface:
                 name of the bucket.
             list files:
                 list of the names of files to be uploaded.
+            path:
+                path to the files.
         Returns:
             None
         """
         for file_ in files:
-            self._upload_file(bucket_name, file_)
+            self._upload_file(bucket_name, file_, path)
+
+    def upload_files_from_local_path(self, bucket_name: str, path: str):
+        files = directory_files_recursively(path)
+        self.upload_files(bucket_name, files, path)
+        return files
 
     def upload_only_different_files(self, bucket_name: str, path: str):
         """
@@ -100,7 +111,7 @@ class S3Interface:
             list of files that have been uploaded.
         """
         files = self.get_files_to_upload(bucket_name, path)
-        self.upload_files(bucket_name, list(map(lambda x: x[0], files)))
+        self.upload_files(bucket_name, list(map(lambda x: x[0], files)), path)
         return files
 
     def get_remote_files_etag(self, bucket_name: str):
@@ -145,4 +156,4 @@ class S3Interface:
         for file_ in self.get_remote_files_etag(bucket_name):
             if file_ in local_files:
                 local_files.remove(file_)
-        return local_files
+        return list(map(lambda x: (os.path.join(path, x[0]), x[1]), local_files))

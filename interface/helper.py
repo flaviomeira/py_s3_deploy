@@ -58,13 +58,15 @@ def directory_files_md5(path: str) -> list:
     return files
 
 
-def get_md5_recursively(path: str) -> list:
+def get_md5_recursively(path: str, full_path=False) -> list:
     """
     Walks through a given directory to get the hashes of all files within it,
     including in subfolders.
     Args:
         str path:
-        desired path.
+            desired path.
+        bool: full_path:
+            decides if returns only the path from the given directory or the full path.
 
     Returns:
         list of all the tree of files and their md5 in the following format:
@@ -72,7 +74,10 @@ def get_md5_recursively(path: str) -> list:
              ('module/file2', 'hash2')]
     """
     hashes = map(lambda x: directory_files_md5(x[0]), os.walk(path))
-    return reduce(lambda crr, src: crr + src, hashes)
+    flat_list = reduce(lambda crr, src: crr + src, hashes)
+    if full_path:
+        return flat_list
+    return list(map(lambda x: (x[0].replace(path+'/', ''), x[1]), flat_list))
 
 
 def directory_files(path: str) -> list:
@@ -93,22 +98,24 @@ def directory_files(path: str) -> list:
     return files
 
 
-def directory_files_recursively(path: str) -> list:
+def directory_files_recursively(path: str, full_path=True) -> list:
     """
     Gets a list with all the files within the given path, recursively.
     Args:
         str path:
             desired path.
+        bool full_path:
+            decides if returns only the path from the given directory or the full path.
+        
     Returns:
         list of file paths.
     """
     roots = map(lambda x: directory_files(x[0]), os.walk(path))
-    files = reduce(lambda crr, src: crr + src, roots)
-    if path == '.':
-        files = list(map(lambda x: x[2:], files))
-    return files
+    flat_list = reduce(lambda crr, src: crr + src, roots)
+    if full_path:
+        return flat_list
+    return list(map(lambda x: x.replace(path+'/', ''), flat_list))
 
 
-def print_list(list_: list):
-    for item in list_:
-        print(item)
+def remove_text(item, text):
+    return item.replace(text, '')

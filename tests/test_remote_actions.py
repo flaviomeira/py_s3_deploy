@@ -38,7 +38,7 @@ class TestRemoteActions(TestCase):
         with patch.object(self.s3, 
                           'list_objects',
                           return_value={'Contents':
-                                            [{'Key': 'tmp/test1', 'ETag': '"acbd18db4cc2f85cedef654fccc4a4d8"'}]}):
+                                            [{'Key': 'test1', 'ETag': '"acbd18db4cc2f85cedef654fccc4a4d8"'}]}):
             interface = S3Interface(self.s3)
             result = interface.get_files_to_upload(self.bucket_name, 'tmp')
             self.assertEqual([], result)
