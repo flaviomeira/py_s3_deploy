@@ -22,5 +22,6 @@ def main():
     else:
         s3_interface.upload_files(directory_files_recursively(args.local_path))
 
+
 if __name__ == "__main__":
     main()
