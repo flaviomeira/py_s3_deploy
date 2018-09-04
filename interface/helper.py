@@ -77,7 +77,7 @@ def get_md5_recursively(path: str, full_path=False) -> list:
     flat_list = reduce(lambda crr, src: crr + src, hashes)
     if full_path:
         return flat_list
-    return list(map(lambda x: (x[0].replace(path+'/', ''), x[1]), flat_list))
+    return list(map(lambda x: (os.path.relpath(x[0], path), x[1]), flat_list))
 
 
 def directory_files(path: str) -> list:
@@ -114,7 +114,7 @@ def directory_files_recursively(path: str, full_path=True) -> list:
     flat_list = reduce(lambda crr, src: crr + src, roots)
     if full_path:
         return flat_list
-    return list(map(lambda x: x.replace(path+'/', ''), flat_list))
+    return list(map(lambda x: (os.path.relpath(x, path)), flat_list))
 
 
 def remove_text(item, text):
