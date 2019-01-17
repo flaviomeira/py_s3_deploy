@@ -7,11 +7,17 @@ from unittest.mock import patch
 from interface.remote_actions import S3Interface
 from boto3 import client as boto3_client
 
+class StubS3:
+    def list_objects():
+        return 
+
+    def delete_objects():
+        return
 
 class TestRemoteActions(TestCase):
 
     def setUp(self):
-        self.s3 = boto3_client('s3')
+        self.s3 = StubS3()
         self.bucket_name = 'test2207'
         self.local_path = 'tests'
         if 'tmp' not in os.listdir():
@@ -33,12 +39,12 @@ class TestRemoteActions(TestCase):
             interface = S3Interface(self.s3)
             deleted_files = interface.delete_aws_files([{'Key': 'test1'}], self.bucket_name)
             self.assertEqual(['test1'], deleted_files)
-    
+
     def test_get_only_different_files(self):
         with patch.object(self.s3, 
                           'list_objects',
                           return_value={'Contents':
-                                            [{'Key': 'test1', 'ETag': '"acbd18db4cc2f85cedef654fccc4a4d8"'}]}):
+                              [{'Key': 'test1', 'ETag': '"acbd18db4cc2f85cedef654fccc4a4d8"'}]}):
             interface = S3Interface(self.s3)
             result = interface.get_files_to_upload(self.bucket_name, 'tmp')
             self.assertEqual([], result)
