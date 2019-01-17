@@ -5,19 +5,30 @@ AWS deployment made easy.
 
 ## Getting Started
 
-The first step is to clone the repository:
+To effectively make the deployment, you'll need to pass the local path (root of the application) and the bucket name
 
 ```
-git clone git@github.com:flaviomeira/py_s3_deploy.git
+python py_s3_deploy.py --local-path <path> --bucket-name <bucket>
 ```
 
-Then go to the project folder and install the requirements:
+This will upload the whole tree to the bucket passed using the default profile on your aws credentials file.
+If you want to use different credentials, you can use the --profile (-p) flag:
 
 ```
-pip install tox
+python py_s3_deploy.py -P <path> -B <bucket> -p <profile>
 ```
-You're ready to go
 
+Now, in order to remotely delete files which are not in the local project anymore, the --delete-removed(-d) flag is needed
+
+```
+python py_s3_deploy.py -P <path> -B <bucket> -d
+```
+
+Finally, if you want to upload only files with different hashes (modified files) among the new files, there's the --etag (-e) flag
+
+```
+python py_s3_deploy.py -P <path> -B <bucket> -e
+```
 
 ## Running the tests
 
