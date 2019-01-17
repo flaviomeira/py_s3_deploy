@@ -15,19 +15,19 @@ This will upload the whole tree to the bucket passed using the default profile o
 If you want to use different credentials, you can use the --profile (-p) flag:
 
 ```
-python py_s3_deploy.py -P <path> -B <bucket> -p <profile>
+python py_s3_deploy.py -P <path> -b <bucket> -p <profile>
 ```
 
 Now, in order to remotely delete files which are not in the local project anymore, the --delete-removed(-d) flag is needed
 
 ```
-python py_s3_deploy.py -P <path> -B <bucket> -d
+python py_s3_deploy.py -P <path> -b <bucket> -d
 ```
 
 Finally, if you want to upload only files with different hashes (modified files) among the new files, there's the --etag (-e) flag
 
 ```
-python py_s3_deploy.py -P <path> -B <bucket> -e
+python py_s3_deploy.py -P <path> -b <bucket> -e
 ```
 
 ## Running the tests
